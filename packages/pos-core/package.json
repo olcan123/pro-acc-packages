@@ -1,6 +1,6 @@
 {
   "name": "@pro-acc/pos-core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Pro-Acc POS/Restoran ortak Nuxt sayfa, API, servis ve güvenlik katmanı",
   "homepage": "https://github.com/olcan123/pro-acc-packages/tree/main/packages/pos-core#readme",
   "bugs": {
@@ -187,7 +187,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "test": "node --test tests/package.test.mjs"
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@pro-acc/ui": "0.0.2",
