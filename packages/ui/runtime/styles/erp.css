@@ -1,0 +1,207 @@
+/* main.css — main (ERP) uygulamasının stil girişi.
+   Ortak tasarım kimliği (fontlar, @theme token'ları, form/buton/badge sınıfları)
+   packages/pos-ui/app/assets/css/tokens.css içindedir; burada YALNIZCA main'e özel
+   sınıflar bulunur (sidebar, header toggle, kompakt kontroller, kart, DataTable).
+
+   ⚠ tokens.css'te tanımlı sınıfları burada TEKRAR TANIMLAMA — ikizlik sürüklenme
+   (drift) yaratır. main/tests/unit/design/css-duplication.test.ts bunu doğrular. */
+/* Paylaşılan tasarım kimliği — pos-ui katmanı (main, pos ve restaurant aynı dosyayı okur) */
+/* NOT: @custom-variant dark BURADA TANIMLANMAZ — tokens.css tanimlar.
+   Burada ikinci kez tanimlanmisti ve `:where(...)` kullaniyordu; `:where`
+   SIFIR ozgulluk (specificity) tasir, yani dark: yardimci siniflari ayni
+   ozgullukteki acik tema kurallarina KAYBEDER ve koyu mod sessizce bozulur.
+   tokens.css `:is(...)` kullanir; tek kaynak orasidir.
+   Kilit: main/tests/unit/design/css-duplication.test.ts */
+
+/* Paylaşılan UI katmanı (@pro-acc/pos-ui): form bileşenlerindeki sınıflar taransın */
+
+/* Tailwind v4: labelName/fieldName prop adlarını CSS property olarak algılamasın.
+   ⚠ Bu dosya taranmadığı için FieldNumberInput.vue'ya EŞSİZ bir Tailwind utility
+   eklenirse üretilmez. Yalnız tokens.css'te tanımlı bileşen sınıflarını kullan.
+   Bkz. main/tests/unit/design/field-number-input-guard.test.ts */
+/* ══════════════════════════════════════════════════════════════
+   PROJE ÖZEL TASARIM TOKENLARI (@theme - Tailwind v4)
+   Arbitrary (keyfi) class kullanımlarını (ör. bg-[#8B2346])
+   önlemek için burada standart değişkenlere dönüştürülmüştür.
+   ══════════════════════════════════════════════════════════════ */
+@theme {
+  --color-atk-red: #8B2346;
+  --spacing-atk-indent: 156px;
+  --spacing-atk-60: 60px;
+  --spacing-atk-90: 90px;
+  --width-sidebar-mobile: 60%;
+  --height-modal-max: 90vh;
+  --height-report-min: 500px;
+  --height-report-sm: 400px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN'E ÖZEL BİLEŞEN SINIFLARI
+   (pos ve restaurant bu sınıfları kullanmaz — serbestçe değişebilir)
+   ══════════════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ══════════════════════════════════════════════════════════
+     LİSTE AKSİYON BUTONLARI — pages/* List bileşenleri
+     NOT: Tailwind v4 Best Practices (@apply anti-paterni) gereğince
+     bu sınıflar doğrudan Vue bileşenlerine inline class olarak taşındı.
+     ══════════════════════════════════════════════════════════ */
+
+  /* ══════════════════════════════════════════════════════════
+     HEADER TOGGLE — AppHeader dil ve tema değiştirici
+     NOT: Inline classlara taşındı.
+     ══════════════════════════════════════════════════════════ */
+
+  /* ══════════════════════════════════════════════════════════
+     SIDEBAR — AppSidebar/MenuItem.vue
+     NOT: Inline classlara taşındı.
+     ══════════════════════════════════════════════════════════ */
+
+  /* ══════════════════════════════════════════════════════════
+     KOMPAKT KONTROLLER — LedgerTable araç çubuğu + ReportSearchBar
+     ══════════════════════════════════════════════════════════
+     DIKKAT: BU IKI SINIF SILINEMEZ. ctrl-select ve ctrl-search dogrudan
+     LedgerTable.vue sablonunda kullanilir (arama kutusu + sayfa basi satir
+     secici). Bir keresinde ctrl-select yarim silindi ve acilan yorum hic
+     kapatilmadi; bir sonraki yorum kapanisina kadar HER SEY, ctrl-search
+     dahil, yoruma dustu. CSS gecerli kaldigi icin build de testler de
+     yesildi, yalniz ekranda iki kontrol stilsiz gorundu.
+     Kilit: main/tests/unit/design/ledger-table-migration.test.ts
+
+     NOT: bu yorumda kesme isareti ve ters tirnak KULLANMA. Tailwind v4 CSS
+     ayristiricisi onlari string baslangici sayip build-i kirar.
+     ══════════════════════════════════════════════════════════ */
+  .ctrl-select {
+    @apply border border-paper-300 dark:border-paper-700 rounded-sm px-2 py-1 text-sm
+           bg-paper-50 dark:bg-paper-800 text-paper-900 dark:text-paper-100
+           focus:outline-none focus:ring-2 focus:ring-accent-400;
+  }
+
+  .ctrl-search {
+    @apply w-full pl-9 pr-4 py-2 text-sm
+           border border-paper-300 dark:border-paper-700 rounded-sm
+           bg-paper-50 dark:bg-paper-800 text-paper-900 dark:text-paper-100
+           placeholder-paper-500 focus:outline-none focus:ring-2 focus:ring-accent-400;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     LEDGER TABLE — PrimeVue DataTable alternatifi (saf HTML)
+     "Editoryal Defter" kimliğine uygun, main'e özel (yeşil bölge).
+     Flowbite tablo kalıplarından esinlenildi: geniş padding,
+     shadow-xs derinlik, border-default ayırıcılar, hover vurgusu.
+     ⚠ dark: varyantı VİRGÜLLÜ SELECTOR ile birleştirilmez (tuzak 4.1):
+        td ve th AYRI AYRI yazılır, virgülle birleştirilmez.
+     ══════════════════════════════════════════════════════════ */
+
+  /* Kök kapsayıcı — Flowbite: shadow-xs + rounded-base + border */
+  .ledger-table-root {
+    @apply bg-paper-50 dark:bg-paper-900 rounded-sm
+           border border-paper-300 dark:border-paper-800;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  /* Başlık hücreleri — defter sütun başlığı: küçük, seyrek harf aralıklı
+     Flowbite: px-6 py-3 font-medium + bg-secondary-soft */
+  .ledger-th {
+    @apply px-4 py-3 text-left text-2xs font-semibold tracking-wider uppercase
+           bg-paper-200 dark:bg-paper-800
+           text-paper-700 dark:text-paper-300
+           border-b-2 border-paper-300 dark:border-paper-700;
+    font-family: var(--font-sans);
+  }
+
+  /* Filtre satırı hücreleri — biraz daha geniş padding ve tam opak arka plan (sticky için) */
+  .ledger-filter-cell {
+    @apply px-3 py-2 bg-paper-100 dark:bg-paper-900
+           border-b border-paper-200 dark:border-paper-800;
+  }
+
+  /* Filtre inputları — Flowbite input tarzı yumuşak kenarlar */
+  .ledger-filter-input {
+    @apply w-full px-2.5 py-1.5 text-xs rounded-sm
+           bg-paper-50 dark:bg-paper-800
+           border border-paper-300 dark:border-paper-700
+           text-paper-800 dark:text-paper-200
+           placeholder-paper-400 dark:placeholder-paper-600
+           focus:outline-none focus:ring-2 focus:ring-accent-400/50 focus:border-accent-500
+           transition-all duration-150;
+  }
+
+  /* Satır hover — defterde seçili satır aksan tonuyla vurgulanır
+     Flowbite tarzı: daha yumuşak geçiş + belirgin arka plan */
+  .ledger-row {
+    @apply transition-all duration-150 ease-in-out;
+  }
+  .ledger-row:hover {
+    @apply bg-accent-50/70 dark:bg-accent-950/30;
+  }
+
+  /* Zebra şeritlemesi — Tailwind odd:/even: pseudo-class
+     Flowbite tarzı: odd:bg-neutral-primary even:bg-neutral-secondary-soft */
+  .ledger-row-even {
+    @apply bg-paper-50 dark:bg-paper-900;
+  }
+  .ledger-row-odd {
+    @apply bg-paper-100/60 dark:bg-paper-950/30;
+  }
+
+  /* Veri hücreleri — Flowbite: px-6 py-4, daha geniş ve okunur */
+  .ledger-td {
+    @apply px-4 py-2.5 text-sm
+           text-paper-800 dark:text-paper-100
+           border-b border-paper-200 dark:border-paper-800;
+  }
+
+  /* İlk sütun (ürün adı gibi tanımlayıcı): daha koyu, font-medium
+     Flowbite tarzı: font-medium text-heading whitespace-nowrap */
+  .ledger-td-primary {
+    @apply font-medium text-paper-900 dark:text-paper-50 whitespace-nowrap;
+  }
+
+  /* Dip toplam hücreleri — yapışkan, muhasebe çift çizgi geleneği */
+  .ledger-tfoot-td {
+    @apply sticky bottom-0 z-10 px-4 py-3 text-sm font-bold
+           bg-paper-200 dark:bg-paper-800
+           text-paper-900 dark:text-paper-50;
+    border-top: 3px double var(--color-paper-500);
+  }
+
+  /* Sayfa düğmeleri — Flowbite sayfalama stiline yakın */
+  .ledger-page-btn {
+    @apply inline-flex items-center justify-center
+           min-w-8 h-8 px-2 text-xs font-medium rounded-sm
+           text-paper-600 dark:text-paper-400
+           hover:bg-paper-200 dark:hover:bg-paper-800
+           disabled:opacity-30 disabled:cursor-not-allowed
+           transition-all duration-150;
+  }
+  .ledger-page-btn-active {
+    @apply bg-accent-600 text-paper-50 hover:bg-accent-700
+           shadow-sm;
+  }
+
+  /* ── SEÇİM KONTROLLERİ ─────────────────────────────────────────────────
+     LedgerTable şablonu bu sınıfları kullanıyordu ama TANIMLI DEĞİLLERDİ →
+     seçim kutuları tarayıcı varsayılanıyla, tema dışında görünüyordu. */
+  .ctrl-checkbox {
+    @apply block h-4 w-4 rounded-xs cursor-pointer
+           border border-paper-400 dark:border-paper-600
+           bg-paper-50 dark:bg-paper-900
+           text-accent-600
+           focus:ring-2 focus:ring-accent-400 focus:ring-offset-0;
+  }
+
+  .ctrl-radio {
+    @apply block h-4 w-4 rounded-full cursor-pointer
+           border border-paper-400 dark:border-paper-600
+           bg-paper-50 dark:bg-paper-900
+           text-accent-600
+           focus:ring-2 focus:ring-accent-400 focus:ring-offset-0;
+  }
+
+  /* Seçili satır — defter dili: sol kenarda aksan işareti, zemin hafif tonlu */
+  .ledger-row-selected {
+    @apply bg-accent-50 dark:bg-accent-950/30;
+    box-shadow: inset 2px 0 0 0 var(--color-accent-600);
+  }
+}

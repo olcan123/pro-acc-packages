@@ -1,0 +1,798 @@
+/* tokens.css — "Editoryal Defter" tasarım kimliğinin paylaşılan CSS katmanı.
+   Üç uygulama da bunu @import eder: main (3002), pos (3000), restaurant (3001).
+
+   Ham hex değerlerinin tek kaynağı packages/pos-ui/design-tokens.ts'tir;
+   main/tests/unit/design/design-tokens.test.ts iki dosyanın eşitliğini doğrular.
+
+   İÇERİK
+     1. @font-face      — self-host fontlar (CDN YOK; offline/USB dağıtımı için şart)
+     2. @custom-variant — class tabanlı dark mode (tek tanım, iki main.css'ten buraya taşındı)
+     3. @theme          — 7 taban rampa + Tailwind renk ailelerinin bunlara YENİDEN EŞLENMESİ
+     4. temel kurallar  — html zemini, tabular rakamlar
+     5. @layer components — üç uygulamanın paylaştığı form/buton/badge sınıfları
+
+   RAMP REMAP: Tailwind'in gray/blue/emerald/... aileleri defter rampalarına eşlenir.
+   Böylece `bg-gray-900` yazan 200+ dosya tek satır değişmeden yeni kimliğe geçer.
+   ⚠ Sınıf ADLARI sözleşmedir (üç uygulama + useFormStyles.js) — sadece GÖVDELER değişir.
+   Bkz. main/tests/unit/design/form-style-contract.test.ts
+*/
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. FONTLAR — packages/pos-ui/public/fonts/ (Nuxt layer public/ → /fonts/*)
+   Hepsi OFL 1.1. Kaynak: @fontsource/* devDependency'leri; dosyalar
+   public/fonts/'a kopyalanıp repoya commit edilir (CDN YOK — offline/USB).
+
+   ⚠ İKİ ALT KÜME DE ZORUNLU:
+     latin      → Arnavutça ë (U+00EB), ç (U+00E7) ve Türkçe ı (U+0131)
+     latin-ext  → Türkçe ğ (U+011F), ş (U+015F), İ (U+0130)
+   Yalnız birini almak baskıda (sq) veya arayüzde (tr) harf düşmesine yol açar.
+
+   Mutlak /fonts/ yolu: @import ile taşınınca yol yeniden yazılmaz, baskı
+   iframe'i içinden de aynı URL ile erişilir.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── IBM Plex Sans — gövde/UI ─────────────────────────────────────────────── */
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-ext-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-ext-500-normal.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-ext-600-normal.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ── IBM Plex Mono — rakam/kod (Sans'ın metrik kardeşi) ───────────────────── */
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-latin-ext-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-latin-ext-500-normal.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ── Source Serif 4 — başlık/display, defter kimliğinin taşıyıcısı ────────── */
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/source-serif-4-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/source-serif-4-latin-ext-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/source-serif-4-latin-600-normal.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/source-serif-4-latin-ext-600-normal.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. DARK MODE VARYANTI — <html> üzerindeki .dark sınıfına yanıt verir
+   (VueUse useColorMode tarafından konur; main'de ayrıca FOUC koruması vardır)
+   ══════════════════════════════════════════════════════════════════════════ */
+@custom-variant dark (&:is(.dark, .dark *));
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. TEMA TOKEN'LARI
+   ══════════════════════════════════════════════════════════════════════════ */
+@theme {
+
+  /* ── TİPOGRAFİ ─────────────────────────────────────────────────────────── */
+  --font-sans:  "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono:  "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+
+  /* Defter etiketi boyutu — sütun başlıkları, rozet metni, KPI etiketleri.
+     Tailwind'in en küçük adımı `text-xs` (12px); bu ölçekte bir kademe daha
+     gerekiyordu ve kod içinde `text-[8px]` / `text-[9px]` / `text-[10px]` /
+     `text-[11px]` olarak DÖRT FARKLI keyfi değerle yazılmıştı (47 kullanım).
+     Tek adıma indirildi — keyfi değer yerine tema ölçeği kullanmak Tailwind'in
+     kendi önerisidir.
+
+     NEDEN 10px (11 değil): `text-xs` zaten 12px. 11px seçilseydi iki kademe
+     görsel olarak ayırt edilemezdi ve ölçek anlamını yitirirdi. 10/12/14
+     progresyonu net; 8-9px ise zaten okunabilirlik sınırının altındaydı. */
+  --text-2xs: 0.625rem;              /* 10px */
+  --text-2xs--line-height: 0.875rem; /* 14px */
+
+  /* ── RADIUS — kağıt gibi, balon gibi değil (rounded-full dokunulmaz) ────── */
+  --radius-xs:  1px;
+  --radius-sm:  2px;
+  --radius-md:  3px;
+  --radius-lg:  4px;
+  --radius-xl:  5px;
+  --radius-2xl: 6px;
+  --radius-3xl: 8px;
+  --radius-4xl: 8px;
+
+  /* ── TABAN RAMPA: paper — sıcak nötr, kremli kağıt ───────────────────────
+     ⚠ PARLAKLIK KİLİTLİ: her kademe Tailwind gray'in aynı kademesiyle eşit
+     rölatif parlaklıktadır (%1 tolerans). Elle açma/koyulaştırma — uygulamadaki
+     2000+ `text-gray-*` sınıfı bu parlaklıklara göre yazıldı.
+     Bkz. packages/pos-ui/design-tokens.ts ve tests/unit/design/contrast.test.ts */
+  --color-paper-50:  #FFF9F1;
+  --color-paper-100: #FFF2E0;
+  --color-paper-200: #F3E5D2;
+  --color-paper-300: #DFD3C1;
+  --color-paper-400: #ABA193;
+  --color-paper-500: #756E65;
+  --color-paper-600: #59534C;
+  --color-paper-700: #44403A;
+  --color-paper-800: #2B2824;
+  --color-paper-900: #1F1B16;
+  --color-paper-950: #14110C;
+
+  /* ── TABAN RAMPA: accent — kiremit, TEK keskin vurgu (marka) ───────────── */
+  --color-accent-50:  #FDF5F2;
+  --color-accent-100: #FAE6DF;
+  --color-accent-200: #F3C9BB;
+  --color-accent-300: #E9A490;
+  --color-accent-400: #DC7A5F;
+  --color-accent-500: #C9563A;
+  --color-accent-600: #B4331F;
+  --color-accent-700: #942716;
+  --color-accent-800: #762012;
+  --color-accent-900: #5E1B11;
+  --color-accent-950: #350D07;
+
+  /* ── TABAN RAMPA: positive — defter yeşili (alacak/kâr) ────────────────── */
+  --color-positive-50:  #F1F8F4;
+  --color-positive-100: #DBEDE3;
+  --color-positive-200: #B7DAC7;
+  --color-positive-300: #8AC0A6;
+  --color-positive-400: #55A882;
+  --color-positive-500: #2F8A64;
+  --color-positive-600: #1F6F52;
+  --color-positive-700: #185943;
+  --color-positive-800: #144736;
+  --color-positive-900: #11392C;
+  --color-positive-950: #081F18;
+
+  /* ── TABAN RAMPA: negative — oxblood (borç/zarar/hata) ─────────────────── */
+  --color-negative-50:  #FCF3F3;
+  --color-negative-100: #F7E1E2;
+  --color-negative-200: #EDC0C3;
+  --color-negative-300: #DE979C;
+  --color-negative-400: #C86A72;
+  --color-negative-500: #A8444E;
+  --color-negative-600: #7C1D24;
+  --color-negative-700: #67181E;
+  --color-negative-800: #551419;
+  --color-negative-900: #451115;
+  --color-negative-950: #26080B;
+
+  /* ── TABAN RAMPA: ochre — sıcak okra (uyarı/düzenle/bekleyen) ──────────── */
+  --color-ochre-50:  #FDF8EE;
+  --color-ochre-100: #F9EDD4;
+  --color-ochre-200: #F1D8A6;
+  --color-ochre-300: #E4BC71;
+  --color-ochre-400: #D19E44;
+  --color-ochre-500: #B87F27;
+  --color-ochre-600: #9A661C;
+  --color-ochre-700: #7A4F17;
+  --color-ochre-800: #613F15;
+  --color-ochre-900: #4F3413;
+  --color-ochre-950: #2B1B09;
+
+  /* ── TABAN RAMPA: ink — mürekkep mavisi (ikincil bilgi/grafik serisi) ──── */
+  --color-ink-50:  #F1F5F9;
+  --color-ink-100: #DEE8F0;
+  --color-ink-200: #BCD0E1;
+  --color-ink-300: #8FB0C9;
+  --color-ink-400: #5C8AAC;
+  --color-ink-500: #3A6A8E;
+  --color-ink-600: #2C5578;
+  --color-ink-700: #244461;
+  --color-ink-800: #1F394F;
+  --color-ink-900: #1B3043;
+  --color-ink-950: #0E1A26;
+
+  /* ── TABAN RAMPA: plum — koyu erik (rapor aksanı/üçüncü grafik serisi) ─── */
+  --color-plum-50:  #F9F4F8;
+  --color-plum-100: #F0E4EE;
+  --color-plum-200: #DFC7DB;
+  --color-plum-300: #C6A2C1;
+  --color-plum-400: #A87AA3;
+  --color-plum-500: #8A5885;
+  --color-plum-600: #70456B;
+  --color-plum-700: #5B3A5E;
+  --color-plum-800: #4A314D;
+  --color-plum-900: #3D2940;
+  --color-plum-950: #221624;
+
+  /* ══════════════════════════════════════════════════════════════════════
+     RAMP REMAP — Tailwind'in hazır aileleri defter rampalarına eşlenir.
+     Sayfa dosyalarındaki `bg-gray-900`, `text-blue-600`, `border-rose-500`
+     gibi 2000+ sınıf tek satır değişmeden yeni kimliğe döner.
+     Bu blok olmadan 230 sayfayı elle düzenlemek gerekirdi.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* Üç nötr ailesi (uygulama gray, auth layout slate, PrimeVue dark zinc) → paper */
+  --color-gray-50:  var(--color-paper-50);
+  --color-gray-100: var(--color-paper-100);
+  --color-gray-200: var(--color-paper-200);
+  --color-gray-300: var(--color-paper-300);
+  --color-gray-400: var(--color-paper-400);
+  --color-gray-500: var(--color-paper-500);
+  --color-gray-600: var(--color-paper-600);
+  --color-gray-700: var(--color-paper-700);
+  --color-gray-800: var(--color-paper-800);
+  --color-gray-900: var(--color-paper-900);
+  --color-gray-950: var(--color-paper-950);
+
+  --color-slate-50:  var(--color-paper-50);
+  --color-slate-100: var(--color-paper-100);
+  --color-slate-200: var(--color-paper-200);
+  --color-slate-300: var(--color-paper-300);
+  --color-slate-400: var(--color-paper-400);
+  --color-slate-500: var(--color-paper-500);
+  --color-slate-600: var(--color-paper-600);
+  --color-slate-700: var(--color-paper-700);
+  --color-slate-800: var(--color-paper-800);
+  --color-slate-900: var(--color-paper-900);
+  --color-slate-950: var(--color-paper-950);
+
+  --color-zinc-50:  var(--color-paper-50);
+  --color-zinc-100: var(--color-paper-100);
+  --color-zinc-200: var(--color-paper-200);
+  --color-zinc-300: var(--color-paper-300);
+  --color-zinc-400: var(--color-paper-400);
+  --color-zinc-500: var(--color-paper-500);
+  --color-zinc-600: var(--color-paper-600);
+  --color-zinc-700: var(--color-paper-700);
+  --color-zinc-800: var(--color-paper-800);
+  --color-zinc-900: var(--color-paper-900);
+  --color-zinc-950: var(--color-paper-950);
+
+  --color-neutral-50:  var(--color-paper-50);
+  --color-neutral-100: var(--color-paper-100);
+  --color-neutral-200: var(--color-paper-200);
+  --color-neutral-300: var(--color-paper-300);
+  --color-neutral-400: var(--color-paper-400);
+  --color-neutral-500: var(--color-paper-500);
+  --color-neutral-600: var(--color-paper-600);
+  --color-neutral-700: var(--color-paper-700);
+  --color-neutral-800: var(--color-paper-800);
+  --color-neutral-900: var(--color-paper-900);
+  --color-neutral-950: var(--color-paper-950);
+
+  --color-stone-50:  var(--color-paper-50);
+  --color-stone-100: var(--color-paper-100);
+  --color-stone-200: var(--color-paper-200);
+  --color-stone-300: var(--color-paper-300);
+  --color-stone-400: var(--color-paper-400);
+  --color-stone-500: var(--color-paper-500);
+  --color-stone-600: var(--color-paper-600);
+  --color-stone-700: var(--color-paper-700);
+  --color-stone-800: var(--color-paper-800);
+  --color-stone-900: var(--color-paper-900);
+  --color-stone-950: var(--color-paper-950);
+
+  /* Marka mavisi → kiremit aksan (uygulamadaki 377+ blue-* kullanımı) */
+  --color-blue-50:  var(--color-accent-50);
+  --color-blue-100: var(--color-accent-100);
+  --color-blue-200: var(--color-accent-200);
+  --color-blue-300: var(--color-accent-300);
+  --color-blue-400: var(--color-accent-400);
+  --color-blue-500: var(--color-accent-500);
+  --color-blue-600: var(--color-accent-600);
+  --color-blue-700: var(--color-accent-700);
+  --color-blue-800: var(--color-accent-800);
+  --color-blue-900: var(--color-accent-900);
+  --color-blue-950: var(--color-accent-950);
+
+  /* primary-* — pos-core'da FieldAutocomplete vurguları kullanıyordu;
+     main'de bugüne kadar TANIMSIZDI (sınıflar renksiz kalıyordu) */
+  --color-primary-50:  var(--color-accent-50);
+  --color-primary-100: var(--color-accent-100);
+  --color-primary-200: var(--color-accent-200);
+  --color-primary-300: var(--color-accent-300);
+  --color-primary-400: var(--color-accent-400);
+  --color-primary-500: var(--color-accent-500);
+  --color-primary-600: var(--color-accent-600);
+  --color-primary-700: var(--color-accent-700);
+  --color-primary-800: var(--color-accent-800);
+  --color-primary-900: var(--color-accent-900);
+  --color-primary-950: var(--color-accent-950);
+
+  /* indigo/sky/cyan → mürekkep mavisi (ikincil bilgi, grafik serisi) */
+  --color-indigo-50:  var(--color-ink-50);
+  --color-indigo-100: var(--color-ink-100);
+  --color-indigo-200: var(--color-ink-200);
+  --color-indigo-300: var(--color-ink-300);
+  --color-indigo-400: var(--color-ink-400);
+  --color-indigo-500: var(--color-ink-500);
+  --color-indigo-600: var(--color-ink-600);
+  --color-indigo-700: var(--color-ink-700);
+  --color-indigo-800: var(--color-ink-800);
+  --color-indigo-900: var(--color-ink-900);
+  --color-indigo-950: var(--color-ink-950);
+
+  --color-sky-50:  var(--color-ink-50);
+  --color-sky-100: var(--color-ink-100);
+  --color-sky-200: var(--color-ink-200);
+  --color-sky-300: var(--color-ink-300);
+  --color-sky-400: var(--color-ink-400);
+  --color-sky-500: var(--color-ink-500);
+  --color-sky-600: var(--color-ink-600);
+  --color-sky-700: var(--color-ink-700);
+  --color-sky-800: var(--color-ink-800);
+  --color-sky-900: var(--color-ink-900);
+  --color-sky-950: var(--color-ink-950);
+
+  --color-cyan-50:  var(--color-ink-50);
+  --color-cyan-100: var(--color-ink-100);
+  --color-cyan-200: var(--color-ink-200);
+  --color-cyan-300: var(--color-ink-300);
+  --color-cyan-400: var(--color-ink-400);
+  --color-cyan-500: var(--color-ink-500);
+  --color-cyan-600: var(--color-ink-600);
+  --color-cyan-700: var(--color-ink-700);
+  --color-cyan-800: var(--color-ink-800);
+  --color-cyan-900: var(--color-ink-900);
+  --color-cyan-950: var(--color-ink-950);
+
+  /* emerald/green/teal → defter yeşili (alacak, kâr, başarı) */
+  --color-emerald-50:  var(--color-positive-50);
+  --color-emerald-100: var(--color-positive-100);
+  --color-emerald-200: var(--color-positive-200);
+  --color-emerald-300: var(--color-positive-300);
+  --color-emerald-400: var(--color-positive-400);
+  --color-emerald-500: var(--color-positive-500);
+  --color-emerald-600: var(--color-positive-600);
+  --color-emerald-700: var(--color-positive-700);
+  --color-emerald-800: var(--color-positive-800);
+  --color-emerald-900: var(--color-positive-900);
+  --color-emerald-950: var(--color-positive-950);
+
+  --color-green-50:  var(--color-positive-50);
+  --color-green-100: var(--color-positive-100);
+  --color-green-200: var(--color-positive-200);
+  --color-green-300: var(--color-positive-300);
+  --color-green-400: var(--color-positive-400);
+  --color-green-500: var(--color-positive-500);
+  --color-green-600: var(--color-positive-600);
+  --color-green-700: var(--color-positive-700);
+  --color-green-800: var(--color-positive-800);
+  --color-green-900: var(--color-positive-900);
+  --color-green-950: var(--color-positive-950);
+
+  --color-teal-50:  var(--color-positive-50);
+  --color-teal-100: var(--color-positive-100);
+  --color-teal-200: var(--color-positive-200);
+  --color-teal-300: var(--color-positive-300);
+  --color-teal-400: var(--color-positive-400);
+  --color-teal-500: var(--color-positive-500);
+  --color-teal-600: var(--color-positive-600);
+  --color-teal-700: var(--color-positive-700);
+  --color-teal-800: var(--color-positive-800);
+  --color-teal-900: var(--color-positive-900);
+  --color-teal-950: var(--color-positive-950);
+
+  /* rose/red → oxblood (borç, zarar, hata, sil) */
+  --color-rose-50:  var(--color-negative-50);
+  --color-rose-100: var(--color-negative-100);
+  --color-rose-200: var(--color-negative-200);
+  --color-rose-300: var(--color-negative-300);
+  --color-rose-400: var(--color-negative-400);
+  --color-rose-500: var(--color-negative-500);
+  --color-rose-600: var(--color-negative-600);
+  --color-rose-700: var(--color-negative-700);
+  --color-rose-800: var(--color-negative-800);
+  --color-rose-900: var(--color-negative-900);
+  --color-rose-950: var(--color-negative-950);
+
+  --color-red-50:  var(--color-negative-50);
+  --color-red-100: var(--color-negative-100);
+  --color-red-200: var(--color-negative-200);
+  --color-red-300: var(--color-negative-300);
+  --color-red-400: var(--color-negative-400);
+  --color-red-500: var(--color-negative-500);
+  --color-red-600: var(--color-negative-600);
+  --color-red-700: var(--color-negative-700);
+  --color-red-800: var(--color-negative-800);
+  --color-red-900: var(--color-negative-900);
+  --color-red-950: var(--color-negative-950);
+
+  /* amber/orange/yellow → sıcak okra (uyarı, düzenle, bekleyen, senkron) */
+  --color-amber-50:  var(--color-ochre-50);
+  --color-amber-100: var(--color-ochre-100);
+  --color-amber-200: var(--color-ochre-200);
+  --color-amber-300: var(--color-ochre-300);
+  --color-amber-400: var(--color-ochre-400);
+  --color-amber-500: var(--color-ochre-500);
+  --color-amber-600: var(--color-ochre-600);
+  --color-amber-700: var(--color-ochre-700);
+  --color-amber-800: var(--color-ochre-800);
+  --color-amber-900: var(--color-ochre-900);
+  --color-amber-950: var(--color-ochre-950);
+
+  --color-orange-50:  var(--color-ochre-50);
+  --color-orange-100: var(--color-ochre-100);
+  --color-orange-200: var(--color-ochre-200);
+  --color-orange-300: var(--color-ochre-300);
+  --color-orange-400: var(--color-ochre-400);
+  --color-orange-500: var(--color-ochre-500);
+  --color-orange-600: var(--color-ochre-600);
+  --color-orange-700: var(--color-ochre-700);
+  --color-orange-800: var(--color-ochre-800);
+  --color-orange-900: var(--color-ochre-900);
+  --color-orange-950: var(--color-ochre-950);
+
+  --color-yellow-50:  var(--color-ochre-50);
+  --color-yellow-100: var(--color-ochre-100);
+  --color-yellow-200: var(--color-ochre-200);
+  --color-yellow-300: var(--color-ochre-300);
+  --color-yellow-400: var(--color-ochre-400);
+  --color-yellow-500: var(--color-ochre-500);
+  --color-yellow-600: var(--color-ochre-600);
+  --color-yellow-700: var(--color-ochre-700);
+  --color-yellow-800: var(--color-ochre-800);
+  --color-yellow-900: var(--color-ochre-900);
+  --color-yellow-950: var(--color-ochre-950);
+
+  /* violet/purple/fuchsia → koyu erik */
+  --color-violet-50:  var(--color-plum-50);
+  --color-violet-100: var(--color-plum-100);
+  --color-violet-200: var(--color-plum-200);
+  --color-violet-300: var(--color-plum-300);
+  --color-violet-400: var(--color-plum-400);
+  --color-violet-500: var(--color-plum-500);
+  --color-violet-600: var(--color-plum-600);
+  --color-violet-700: var(--color-plum-700);
+  --color-violet-800: var(--color-plum-800);
+  --color-violet-900: var(--color-plum-900);
+  --color-violet-950: var(--color-plum-950);
+
+  --color-purple-50:  var(--color-plum-50);
+  --color-purple-100: var(--color-plum-100);
+  --color-purple-200: var(--color-plum-200);
+  --color-purple-300: var(--color-plum-300);
+  --color-purple-400: var(--color-plum-400);
+  --color-purple-500: var(--color-plum-500);
+  --color-purple-600: var(--color-plum-600);
+  --color-purple-700: var(--color-plum-700);
+  --color-purple-800: var(--color-plum-800);
+  --color-purple-900: var(--color-plum-900);
+  --color-purple-950: var(--color-plum-950);
+
+  --color-fuchsia-50:  var(--color-plum-50);
+  --color-fuchsia-100: var(--color-plum-100);
+  --color-fuchsia-200: var(--color-plum-200);
+  --color-fuchsia-300: var(--color-plum-300);
+  --color-fuchsia-400: var(--color-plum-400);
+  --color-fuchsia-500: var(--color-plum-500);
+  --color-fuchsia-600: var(--color-plum-600);
+  --color-fuchsia-700: var(--color-plum-700);
+  --color-fuchsia-800: var(--color-plum-800);
+  --color-fuchsia-900: var(--color-plum-900);
+  --color-fuchsia-950: var(--color-plum-950);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. TEMEL KURALLAR
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Sayfa zemini — koyu modda BEYAZ kağıt değil, kararmış mürekkep.
+   color-scheme tarayıcı kaydırma çubuğu/form kontrollerini de doğru boyar. */
+/* ⚠ METİN RENGİ BURADA TANIMLANIR — projede daha önce GLOBAL bir metin rengi yoktu.
+   Kendi rengini yazmayan her öğe tarayıcı varsayılanını (siyah) miras alıyordu;
+   koyu modda bu, siyah-üstüne-siyah demekti. Temeli burada kurmak, tek tek
+   bileşenlere `dark:text-*` eklemekten hem daha güvenli hem daha kapsayıcı.
+   `.dark` seçicisi düz CSS ile yazılır (Tailwind dark: varyantı değil) —
+   bkz. tests/unit/design/dark-variant-selectors.test.ts */
+html {
+  background-color: var(--color-paper-100);
+  color: var(--color-paper-950);
+  color-scheme: light;
+  font-family: var(--font-sans);
+}
+html.dark {
+  background-color: var(--color-paper-950);
+  color: var(--color-paper-100);
+  color-scheme: dark;
+}
+
+/* Grafik ızgara çizgileri (Unovis). Tailwind sınıfı değil, doğrudan CSS değişkeni
+   olarak tüketilir — bileşenlerin scoped stilleri bunları okur.
+   Karşılığı: packages/pos-ui/design-tokens.ts → chartAxis */
+html {
+  --chart-grid-light: rgba(0, 0, 0, 0.06);
+  --chart-grid-dark: rgba(255, 255, 255, 0.06);
+}
+
+/* Rakamlar defterde hizalı durmalı: tablo, input ve toplam satırlarında
+   tabular figür. IBM Plex ailesinde gerçek tnum desteği var. */
+table,
+input[type="number"],
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Sayfa başlıkları editoryal serif — defter kimliğinin taşıyıcısı */
+h1, h2 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. PAYLAŞILAN BİLEŞEN SINIFLARI
+   Bu blok daha önce main/app/assets/css/main.css ve
+   packages/pos-core/app/assets/css/main.css içinde BİREBİR İKİ KEZ vardı.
+   Tek kaynağa indirildi — sürüklenme (drift) kaynağı kapatıldı.
+
+   ⚠ SINIF ADLARI SÖZLEŞMEDİR. useFormStyles.js bu adları string olarak döndürür
+   ve üç uygulama birden tüketir. Ad değiştirme; gövde değiştir.
+   ══════════════════════════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── INPUT ────────────────────────────────────────────────────────────────
+     Defter dili: kutu değil satır. İnce kural çizgisi, küçük radius,
+     focus'ta aksan çizgisi.                                                */
+  .field-input-base {
+    @apply block w-full rounded-lg focus:ring-2 focus:outline-none transition-colors duration-150;
+  }
+
+  .field-input-default {
+    @apply bg-paper-50 border border-paper-300 text-paper-950 placeholder-paper-500
+           focus:ring-accent-400 focus:border-accent-600
+           dark:bg-paper-900 dark:text-paper-100 dark:placeholder-paper-500 dark:border-paper-800;
+  }
+
+  /* Dolu: geçerli değer var — hafif aksan tonu, bağırmadan */
+  .field-input-filled {
+    @apply bg-accent-50/60 border border-accent-200 text-paper-950 placeholder-paper-500
+           focus:ring-accent-400 focus:border-accent-600
+           dark:bg-paper-900 dark:text-paper-100 dark:border-accent-900/60;
+  }
+
+  /* Hata: oxblood — aksandan (kiremit) hem daha koyu hem daha az turuncu */
+  .field-input-error {
+    @apply bg-negative-50 border border-negative-600 text-negative-900 placeholder-negative-300
+           focus:ring-negative-400 focus:border-negative-700
+           dark:bg-negative-950/40 dark:text-negative-200 dark:placeholder-negative-800 dark:border-negative-800;
+  }
+
+  .field-input-disabled {
+    @apply bg-paper-200 border border-paper-300 text-paper-500 cursor-not-allowed
+           dark:bg-paper-800 dark:border-paper-700 dark:text-paper-500;
+  }
+
+  /* ── INPUT BOYUTLARI ─────────────────────────────────────────────────── */
+  .field-size-xs { @apply px-2 py-1 text-xs h-7; }
+  .field-size-sm { @apply p-2 text-sm; }
+  .field-size-md { @apply p-3 text-base; }
+
+  /* ── LABEL — defter fişi etiketi: küçük, seyrek harf aralıklı ─────────── */
+  .field-label         { @apply block mb-1.5 text-xs font-semibold tracking-wide; }
+  .field-label-default { @apply text-paper-700 dark:text-paper-300; }
+  .field-label-filled  { @apply text-accent-700 dark:text-accent-400; }
+  .field-label-error   { @apply text-negative-700 dark:text-negative-300; }
+  .field-label-disabled { @apply text-paper-500 cursor-not-allowed; }
+
+  .field-error-msg { @apply mt-1.5 text-xs text-negative-600 dark:text-negative-300; }
+
+  /* ── DOSYA SEÇİCİ ────────────────────────────────────────────────────── */
+  .file-btn-base     { @apply file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-sm file:font-medium; }
+  .file-btn-default  { @apply file:bg-paper-50 file:text-paper-700 file:border file:border-paper-300
+                              hover:file:bg-paper-200 cursor-pointer transition-colors
+                              dark:file:bg-paper-800 dark:file:text-paper-200
+                              dark:file:border-paper-700 dark:hover:file:bg-paper-700; }
+  .file-btn-error    { @apply file:bg-negative-100 file:text-negative-700 hover:file:bg-negative-200
+                              cursor-pointer transition-colors
+                              dark:file:bg-negative-950/50 dark:file:text-negative-300; }
+  .file-btn-disabled { @apply file:bg-paper-200 file:text-paper-500
+                              dark:file:bg-paper-700 dark:file:text-paper-400; }
+
+  /* ── BADGE — pill değil, kaşe: küçük radius, ince kenar ──────────────── */
+  .badge-base      { @apply inline-flex items-center rounded-xs font-semibold tracking-wide
+                            border transition-colors; }
+
+  .badge-primary   { @apply bg-accent-50   text-accent-800   border-accent-200
+                            dark:bg-accent-950/50   dark:text-accent-300   dark:border-accent-900; }
+  .badge-success   { @apply bg-positive-50 text-positive-800 border-positive-200
+                            dark:bg-positive-950/50 dark:text-positive-300 dark:border-positive-900; }
+  .badge-danger    { @apply bg-negative-50 text-negative-800 border-negative-200
+                            dark:bg-negative-950/50 dark:text-negative-300 dark:border-negative-900; }
+  .badge-warning   { @apply bg-ochre-50    text-ochre-800    border-ochre-200
+                            dark:bg-ochre-950/50    dark:text-ochre-300    dark:border-ochre-900; }
+  .badge-info      { @apply bg-ink-50      text-ink-800      border-ink-200
+                            dark:bg-ink-950/50      dark:text-ink-300      dark:border-ink-900; }
+  .badge-secondary { @apply bg-paper-100   text-paper-700    border-paper-300
+                            dark:bg-paper-800       dark:text-paper-300    dark:border-paper-700; }
+
+  .badge-size-xs { @apply px-1.5 py-0.5 text-[10px]; }
+  .badge-size-sm { @apply px-2   py-0.5 text-xs; }
+  .badge-size-md { @apply px-2.5 py-1   text-xs; }
+  .badge-size-lg { @apply px-3   py-1.5 text-sm; }
+
+  /* ── BUTON ────────────────────────────────────────────────────────────
+     Defter dili: solid aksan tek yerde (birincil), gerisi kural çizgili.  */
+  .btn-base {
+    @apply inline-flex items-center justify-center font-medium tracking-wide
+           transition-colors duration-150
+           focus:outline-none focus:ring-2 focus:ring-offset-1
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary   { @apply bg-accent-600 text-paper-50 hover:bg-accent-700 focus:ring-accent-400; }
+
+  .btn-secondary { @apply bg-paper-50 text-paper-800 hover:bg-paper-200 focus:ring-paper-400
+                          border border-paper-300
+                          dark:bg-paper-800 dark:text-paper-200
+                          dark:hover:bg-paper-700 dark:border-paper-700; }
+
+  .btn-danger    { @apply bg-negative-600 text-paper-50 hover:bg-negative-700 focus:ring-negative-400; }
+
+  .btn-success   { @apply bg-positive-600 text-paper-50 hover:bg-positive-700 focus:ring-positive-400; }
+
+  .btn-warning   { @apply bg-ochre-600 text-paper-50 hover:bg-ochre-700 focus:ring-ochre-400; }
+
+  .btn-ghost     { @apply bg-transparent text-paper-600 hover:bg-paper-200 focus:ring-paper-400
+                          dark:text-paper-400 dark:hover:bg-paper-800; }
+
+  .btn-link      { @apply bg-transparent text-accent-700 hover:underline underline-offset-2 p-0 h-auto
+                          dark:text-accent-400; }
+
+  .btn-size-xs { @apply px-2 py-1 text-xs; }
+  .btn-size-sm { @apply px-3 py-1.5 text-sm; }
+  .btn-size-md { @apply px-4 py-2 text-sm; }
+  .btn-size-lg { @apply px-6 py-2.5 text-base; }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     DEFTER TABLOSU YARDIMCILARI
+     Faz 3'te BaseList / InvoiceListPage / AnalyticsReport tüketir.
+     Mobilde tabloyu karta çevirmek yerine YATAY KAYDIRMA + SABİT İLK KOLON:
+     muhasebeci kolonları karşılaştırır, kart görünümü bunu yok eder.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* Yatay kaydırma kabı.
+     `overscroll-behavior-x: contain` KRİTİK: mobilde tabloyu yatay kaydırırken
+     hareket sayfaya/tarayıcı geri-git jestine zincirlenmez.
+
+     NOT: "sabit ilk kolon" bilinçli olarak UYGULANMADI. Bu tablolarda ilk kolon
+     seçim checkbox'ı veya `#` sıra numarasıdır (BaseList.vue:129) — dondurmak
+     hiçbir bilgi kazandırmaz, üstelik striped-rows şeritlemesini bozar. */
+  .ledger-scroll {
+    @apply overflow-x-auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Muhasebe geleneği: toplam satırının üstünde ÇİFT ÇİZGİ */
+  .ledger-total-rule {
+    border-top: 3px double var(--color-paper-500);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     KART / PANEL ve LİSTE AKSİYON BUTONLARI  —  ÜÇ UYGULAMA DA KULLANIR
+     ══════════════════════════════════════════════════════════════════════
+     NEDEN BURADA (main.css'te DEĞİL):
+     Bu sınıflar önce hem main.css hem pos-core/main.css içinde ikizdi. Ortak
+     katmana taşınırken "pos/restaurant kullanmıyor" varsayımıyla YALNIZ main'de
+     bırakıldılar — varsayım YANLIŞTI: pos-core'un archive/sessions/settings
+     sayfaları bunları kullanıyor ve o üç ekran biçimsiz kaldı (kart kabuğu yok,
+     butonlar renksiz). Ekran hatası sessizdi: tanımsız sınıf CSS hatası vermez.
+
+     Bugün main tarafında kullanan kalmadı (kart kabukları LedgerTable ve
+     AnalyticsReport'un içine, butonlar FieldButton'a taşındı) — tek tüketici
+     pos-core. Yine de ORTAK katmanda duruyorlar: tüketici pos+restaurant. */
+  .card-panel {
+    @apply bg-paper-50 dark:bg-paper-900 rounded-sm border border-paper-300 dark:border-paper-800;
+  }
+
+  /* Sadece pos-core/settings ve sessions'ın kullandığı iki aksiyon rengi.
+     Ailenin tamamı (view/edit/print/extra) bilerek TAŞINMADI — kullanılmayan
+     sınıf ölü ağırlıktır; gerekince buraya eklenir. */
+  .list-btn-delete {
+    @apply text-negative-600 hover:text-negative-800 font-bold;
+  }
+  .list-btn-sync {
+    @apply text-ochre-600 hover:text-ochre-800 font-bold;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     İPUCU BALONU — v-tooltip direktifinin görünümü
+     ══════════════════════════════════════════════════════════════════════
+     PrimeVue kaldırılınca `v-tooltip` de gitti; yerine
+     packages/pos-ui/app/plugins/tooltip.client.ts kondu. Balonu direktif
+     `document.body`'ye ekler (taşma kesilmesin diye), bu yüzden görünüm
+     KOŞULSUZ derlenen bu katmanda tanımlı olmak ZORUNDA: body'ye sonradan
+     eklenen bir düğümün sınıfını Tailwind kaynak taraması göremez. */
+  .ui-tooltip {
+    @apply z-50 max-w-xs rounded-sm px-2 py-1 text-xs font-medium shadow-md
+           bg-paper-800 text-paper-50 dark:bg-paper-200 dark:text-paper-900;
+    pointer-events: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. BASKI DEĞİŞKEN ADASI — .invoice-page
+   ══════════════════════════════════════════════════════════════════════════
+   Fatura çıktısı ekran temasından BAĞIMSIZDIR: kâğıt her zaman gerçek beyaz,
+   mürekkep koyu. Önceden bu, her alt öğeye `!important` basan kaba bir kaçış
+   hack'iyle sağlanıyordu:
+
+       .invoice-page :deep(*) { border-color:#e5e7eb !important;
+                                background-color: transparent !important; }
+
+   Hack kırılgandı (her yeni arka plan sessizce eziliyordu) ve renkleri ham hex
+   olarak dondurmuştu. Yerine: `color-scheme: light` + açıkça tanımlı --pr-*
+   değişkenleri. Alt bileşenler bu değişkenleri okur; koyu mod sızmaz çünkü
+   kalıtımla gelen bir `dark:` sınıfı KALMAZ.
+
+   Değerlerin karşılığı: packages/pos-ui/design-tokens.ts → printPalette
+   ══════════════════════════════════════════════════════════════════════════ */
+.invoice-page {
+  color-scheme: light;
+
+  --pr-paper: #FFFFFF;        /* kâğıt GERÇEKTEN beyaz — krem yazıcıdan kirli çıkar */
+  --pr-ink: #111111;
+  --pr-muted: #555555;
+  --pr-rule: #999999;
+  --pr-rule-strong: #333333;
+  --pr-head-bg: #EEEEEE;
+  --pr-total-bg: #F5F5F5;
+  --pr-positive: #185943;     /* positive-700 — anlam ekranla aynı kalsın */
+  --pr-negative: #67181E;     /* negative-700 */
+
+  background: var(--pr-paper);
+  color: var(--pr-ink);
+  font-family: var(--font-sans);
+}

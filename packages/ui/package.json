@@ -1,0 +1,130 @@
+{
+  "name": "@pro-acc/ui",
+  "version": "0.0.2",
+  "description": "Pro-Acc reusable Nuxt UI: Field inputs, shared ERP components and optional POS interfaces",
+  "keywords": [
+    "erp",
+    "form",
+    "nuxt",
+    "pos",
+    "pro-acc",
+    "ui",
+    "vue"
+  ],
+  "homepage": "https://github.com/olcan123/pro-acc-packages/tree/main/packages/ui#readme",
+  "bugs": {
+    "url": "https://github.com/olcan123/pro-acc-packages/issues"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olcan123/pro-acc-packages.git",
+    "directory": "packages/ui"
+  },
+  "files": [
+    "module.mjs",
+    "module.d.ts",
+    "runtime",
+    "README.md",
+    "DESIGN.md"
+  ],
+  "type": "module",
+  "main": "./module.mjs",
+  "types": "./module.d.ts",
+  "exports": {
+    ".": {
+      "types": "./module.d.ts",
+      "import": "./module.mjs"
+    },
+    "./components/*": "./runtime/components/*",
+    "./erp/*": "./runtime/erp/*",
+    "./pos/*": "./runtime/pos/*",
+    "./composables/*": "./runtime/composables/*",
+    "./utils/date": "./runtime/utils/date.ts",
+    "./utils/cash-count": "./runtime/utils/cash-count.ts",
+    "./utils/cash-limit": "./runtime/utils/cash-limit.ts",
+    "./design-tokens": "./runtime/design-tokens.ts",
+    "./styles.css": "./runtime/styles/ui.css",
+    "./package.json": "./package.json",
+    "./error-page": "./runtime/error.vue",
+    "./tokens.css": "./runtime/styles/tokens.css",
+    "./tooltip-directive": "./runtime/tooltip-directive.ts",
+    "./inventory.json": "./runtime/inventory.json",
+    "./composables/useAppToast": "./runtime/composables/useAppToast.ts",
+    "./composables/useAppToast.ts": "./runtime/composables/useAppToast.ts",
+    "./composables/useAppUpdate": "./runtime/composables/useAppUpdate.js",
+    "./composables/useAppUpdate.js": "./runtime/composables/useAppUpdate.js",
+    "./composables/useConfirmDelete": "./runtime/composables/useConfirmDelete.js",
+    "./composables/useConfirmDelete.js": "./runtime/composables/useConfirmDelete.js",
+    "./composables/useCurrency": "./runtime/composables/useCurrency.js",
+    "./composables/useCurrency.js": "./runtime/composables/useCurrency.js",
+    "./composables/useFormStyles": "./runtime/composables/useFormStyles.js",
+    "./composables/useFormStyles.js": "./runtime/composables/useFormStyles.js",
+    "./composables/useSefCategoryLabel": "./runtime/composables/useSefCategoryLabel.js",
+    "./composables/useSefCategoryLabel.js": "./runtime/composables/useSefCategoryLabel.js",
+    "./composables/useTailwindConfirm": "./runtime/composables/useTailwindConfirm.ts",
+    "./composables/useTailwindConfirm.ts": "./runtime/composables/useTailwindConfirm.ts",
+    "./composables/useUnitLabel": "./runtime/composables/useUnitLabel.js",
+    "./composables/useUnitLabel.js": "./runtime/composables/useUnitLabel.js",
+    "./pos/composables/useCashCount": "./runtime/pos/composables/useCashCount.js",
+    "./pos/composables/useCashCount.js": "./runtime/pos/composables/useCashCount.js",
+    "./pos/composables/usePaymentKeypad": "./runtime/pos/composables/usePaymentKeypad.js",
+    "./pos/composables/usePaymentKeypad.js": "./runtime/pos/composables/usePaymentKeypad.js",
+    "./pos/composables/usePaymentSplit": "./runtime/pos/composables/usePaymentSplit.js",
+    "./pos/composables/usePaymentSplit.js": "./runtime/pos/composables/usePaymentSplit.js",
+    "./pos/composables/usePosHotkeys": "./runtime/pos/composables/usePosHotkeys.js",
+    "./pos/composables/usePosHotkeys.js": "./runtime/pos/composables/usePosHotkeys.js",
+    "./pos/composables/useSessionSync": "./runtime/pos/composables/useSessionSync.js",
+    "./pos/composables/useSessionSync.js": "./runtime/pos/composables/useSessionSync.js",
+    "./pos/composables/useTerminalName": "./runtime/pos/composables/useTerminalName.js",
+    "./pos/composables/useTerminalName.js": "./runtime/pos/composables/useTerminalName.js",
+    "./pos/stores/auth.store": "./runtime/pos/stores/auth.store.js",
+    "./pos/stores/auth.store.js": "./runtime/pos/stores/auth.store.js",
+    "./pos/stores/cart.store": "./runtime/pos/stores/cart.store.js",
+    "./pos/stores/cart.store.js": "./runtime/pos/stores/cart.store.js",
+    "./pos/stores/product.store": "./runtime/pos/stores/product.store.js",
+    "./pos/stores/product.store.js": "./runtime/pos/stores/product.store.js",
+    "./pos/stores/session.store": "./runtime/pos/stores/session.store.js",
+    "./pos/stores/session.store.js": "./runtime/pos/stores/session.store.js",
+    "./pos/stores/settings.store": "./runtime/pos/stores/settings.store.js",
+    "./pos/stores/settings.store.js": "./runtime/pos/stores/settings.store.js",
+    "./pos/stores/terminal.store": "./runtime/pos/stores/terminal.store.js",
+    "./pos/stores/terminal.store.js": "./runtime/pos/stores/terminal.store.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "node --test tests/package.test.mjs",
+    "test": "node --test tests/package.test.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.6.0",
+    "@nuxt/schema": "^4.6.0",
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/vite": "^4.2.2",
+    "@vee-validate/zod": "^4.15.1",
+    "currency.js": "^2.0.4",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.4.1",
+    "tailwindcss": "^4.2.2",
+    "vee-validate": "^4.15.1",
+    "xlsx-js-style": "^1.2.0",
+    "zod": "^3.24.2"
+  },
+  "peerDependencies": {
+    "@nuxtjs/i18n": "^10.0.0",
+    "@pinia/nuxt": "^0.11.0",
+    "nuxt": "^4.0.0",
+    "nuxt-toast": "^1.4.0",
+    "pinia": "^3.0.0",
+    "vue": "^3.5.0",
+    "vue-i18n": "^11.0.0",
+    "vue-router": "^4.0.0 || ^5.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,11 @@
+/* ui.css — Ortak Nuxt UI stil girişi. */
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+@import "./tokens.css";
+@import "./erp.css";
+@import "./pos.css";
+@plugin "@tailwindcss/forms";
+@source "../components";
+@source "../erp/components";
+@source "../pos/components";
+@source not "../components/form/FieldNumberInput.vue";

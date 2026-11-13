@@ -1,0 +1,67 @@
+/* main.css — pos ve restaurant uygulamalarının stil girişi (pos-core katmanı).
+   Ortak tasarım kimliği (fontlar, @theme token'ları, form/buton/badge sınıfları)
+   packages/pos-ui/app/assets/css/tokens.css içindedir; burada YALNIZCA kasa
+   ekranına özel .pos-* sınıfları bulunur.
+
+   ⚠ tokens.css'te tanımlı sınıfları burada TEKRAR TANIMLAMA — daha önce ~55 sınıf
+   main.css ile birebir ikizdi ve sürüklenme (drift) başlamıştı.
+   main/tests/unit/design/css-duplication.test.ts bunu doğrular. */
+
+
+/* Paylaşılan tasarım kimliği — main (3002) ile AYNI dosya */
+
+
+/* Paylaşılan katmanlar: bileşen/layout dosyalarındaki Tailwind sınıfları taransın */
+
+
+/* Tailwind v4: labelName/fieldName prop adlarını CSS property olarak algılamasın */
+
+/* ══════════════════════════════════════════════════════════
+   POS — KASA EKRANI BİLEŞENLERİ
+   iSoft kasa düzenini andırır. Renkler defter kimliğinden gelir
+   (blue ve gray aileleri tokens.css'te accent/paper'a eşlenmiştir).
+   Dokunmatik gereksinimleri KORUNUR: min yükseklik, büyük toplam yazısı.
+   ══════════════════════════════════════════════════════════ */
+@layer components {
+  /* Üst bar (firma + tarih/saat + kullanıcı) */
+  .pos-topbar { @apply h-12 bg-accent-700 text-paper-50 flex items-center justify-between px-4 shadow-md; }
+
+  /* İkincil bar (SHITORE / KLIENTI) */
+  .pos-subbar { @apply bg-paper-100 dark:bg-paper-900 border-b border-paper-300 dark:border-paper-800 text-sm; }
+
+  /* Sağ aksiyon paneli (VEPRIMET) butonları */
+  .pos-action-btn {
+    @apply relative flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-3 text-sm font-semibold
+           text-center leading-tight transition-all duration-150 select-none cursor-pointer
+           focus:outline-none active:scale-[0.98] min-h-[68px] disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .pos-action-primary { @apply bg-accent-600 text-paper-50 hover:bg-accent-700 shadow-sm; }
+  .pos-action-accent  { @apply bg-ink-600 text-paper-50 hover:bg-ink-700 shadow-sm; }
+  .pos-action-neutral { @apply bg-paper-700 text-paper-50 hover:bg-paper-800 shadow-sm; }
+  .pos-action-soft    { @apply bg-accent-50 text-accent-800 hover:bg-accent-100 border border-accent-200
+                                dark:bg-accent-950/40 dark:text-accent-300 dark:border-accent-900; }
+  .pos-action-kbd     { @apply absolute top-1.5 left-2 text-2xs font-bold opacity-70; }
+
+  /* Satış gridi (kalem tablosu) */
+  .pos-grid-head { @apply bg-accent-600 text-paper-50 text-xs font-semibold uppercase tracking-wide; }
+  .pos-grid-cell { @apply px-3 py-2; }
+  .pos-grid-row  { @apply border-b border-paper-200 dark:border-paper-800 text-sm
+                          hover:bg-accent-50/60 dark:hover:bg-accent-950/20 cursor-pointer; }
+  .pos-grid-row-active { @apply bg-accent-100 dark:bg-accent-950/40 hover:bg-accent-100; }
+
+  /* Ödeme tuş takımı */
+  .pos-keypad-btn {
+    @apply rounded-lg bg-paper-200 dark:bg-paper-800 text-paper-900 dark:text-paper-100
+           text-2xl font-semibold py-4 hover:bg-accent-50 dark:hover:bg-accent-950/40
+           active:scale-95 transition-all select-none focus:outline-none;
+  }
+  .pos-keypad-chip {
+    @apply rounded-lg bg-accent-50 dark:bg-accent-950/40 text-accent-800 dark:text-accent-300
+           text-lg font-bold py-4 hover:bg-accent-100 active:scale-95 transition-all select-none focus:outline-none;
+  }
+
+  /* Alt toplam şeridi */
+  .pos-total-label { @apply text-2xs font-medium text-paper-600 dark:text-paper-400 uppercase tracking-wide; }
+  .pos-total-value { @apply text-lg font-bold text-paper-900 dark:text-paper-100 tabular-nums; }
+  .pos-total-grand { @apply text-4xl font-extrabold text-accent-700 dark:text-accent-400 tabular-nums leading-none; }
+}
