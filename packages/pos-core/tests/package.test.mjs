@@ -59,6 +59,10 @@ await test("Nitro npm içindeki paket TypeScript dosyalarını derler", () => {
   const code = transpile(source, { module: 1 });
   const context = { exports: {}, defineNuxtConfig: (config) => config };
   runInNewContext(code, context);
+  assert.ok(
+    context.exports.default.nitro.externals.inline.includes("nuxt/internal"),
+    "Nuxt renderer manifest/entry sanal modüllerini kullanmalıdır",
+  );
   const exclude = context.exports.default.nitro.esbuild.options.exclude;
   for (const separator of ["/", "\\"]) {
     const path = (value) => value.replaceAll("/", separator);

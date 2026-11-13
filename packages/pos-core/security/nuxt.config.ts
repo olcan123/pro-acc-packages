@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   runtimeConfig: { proaccImage: "" },
   nitro: {
-    externals: { inline: ["@pro-acc/pos-core", "@pro-acc/ui"] },
+    // Nuxt 4.6 renderer'ı manifest/entry sanal modülleriyle birlikte paketlenmelidir.
+    externals: { inline: ["@pro-acc/pos-core", "@pro-acc/ui", "nuxt/internal"] },
     // Nitro varsayılan olarak node_modules içindeki TS'yi atlar; iki kaynak paketi derlenmelidir.
     esbuild: {
       options: {
