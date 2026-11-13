@@ -14,6 +14,10 @@ export default defineNuxtModule({
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
     const resolve = (path) => resolver.resolve(path);
+    // Nuxt, node_modules içindeki kaynaklarda örtük importları varsayılan olarak işlemez.
+    nuxt.options.imports.transform ??= {};
+    nuxt.options.imports.transform.include ??= [];
+    nuxt.options.imports.transform.include.push(/@pro-acc[\\/]ui[\\/]runtime[\\/]/);
     addComponentsDir({ path: resolve("./runtime/components"), pathPrefix: true });
     addImportsDir(resolve("./runtime/composables"));
     if (options.tooltip)

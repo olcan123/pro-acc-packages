@@ -17,6 +17,8 @@ export default defineNuxtConfig({
   extends: ["./security"],
   modules: ["@pro-acc/ui"],
   proAccUi: { pos: true },
+  // Npm katmanının sayfa/layout kaynaklarında Nuxt otomatik importlarını etkinleştirir.
+  imports: { transform: { include: [/@pro-acc[\\/]pos-core[\\/]app[\\/]/] } },
 
   devtools: { enabled: true },
   compatibilityDate: "2026-06-13",
