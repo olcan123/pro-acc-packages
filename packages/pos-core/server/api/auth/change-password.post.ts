@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   const parsed = schema.safeParse(await readBody(event));
   if (!parsed.success) {
-    throw createError({ statusCode: 400, statusMessage: parsed.error.errors[0].message });
+    throw createError({ statusCode: 400, statusMessage: parsed.error.errors[0]?.message ?? "validation_error" });
   }
 
   return posAuthService.changePassword(payload.email, parsed.data.currentPassword, parsed.data.newPassword);

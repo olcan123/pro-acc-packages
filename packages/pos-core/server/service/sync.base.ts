@@ -96,7 +96,7 @@ export class SyncService {
     const terminals = await localDb.client.bankTerminal.findMany();
     const paymentCtx = {
       cashGlAccountId: settings.cashGlAccountId,
-      terminalGlById: new Map(terminals.map((t: any) => [t.id, t.glAccountId])),
+      terminalGlById: new Map<string, number>(terminals.map((t: any) => [t.id, t.glAccountId])),
     };
     const payments = groupPaymentsForMain(session.orders.flatMap((o: any) => o.payments), paymentCtx);
 

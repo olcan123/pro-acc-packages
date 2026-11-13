@@ -1,13 +1,16 @@
 // crudHandlers.ts — Tekrar kullanılabilir CRUD route handler factory'leri.
 // Standart CRUD uçlarındaki id/body doğrulama + 404/FK yönetimini tek yerde toplar.
 import type { H3Event } from "h3";
-import type { ZodSchema } from "zod";
+import type { ZodSchema, ZodTypeDef } from "zod";
+
+// Router girdisi metin olabilir; dönüşümden sonra id'nin sayı olması yeterlidir.
+type IdSchema = ZodSchema<{ id: number }, ZodTypeDef, unknown>;
 
 /** Router param `id`'yi zod ile doğrular; geçersizse 400. */
-function parseId(event: H3Event, idSchema: ZodSchema<{ id: number }>): number {
+function parseId(event: H3Event, idSchema: IdSchema): number {
   const r = idSchema.safeParse({ id: getRouterParam(event, "id") });
   if (!r.success) {
-    throw createError({ statusCode: 400, statusMessage: r.error.errors[0].message });
+    throw createError({ statusCode: 400, statusMessage: r.error.errors[0]?.message ?? "v_invalid_id" });
   }
   return r.data.id;
 }
@@ -18,7 +21,7 @@ function parseBody<T>(body: unknown, schema: ZodSchema<T>): T {
   if (!r.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: r.error.errors[0].message,
+      statusMessage: r.error.errors[0]?.message ?? "validation_error",
       data: r.error.errors,
     });
   }
@@ -27,7 +30,7 @@ function parseBody<T>(body: unknown, schema: ZodSchema<T>): T {
 
 interface GetByIdOpts {
   service: Record<string, any>;
-  idSchema: ZodSchema<{ id: number }>;
+  idSchema: IdSchema;
   findMethod?: string;
   notFoundMessage: string;
 }
@@ -54,7 +57,7 @@ export const makeCreateHandler = (opts: CreateOpts) =>
 
 interface UpdateOpts {
   service: Record<string, any>;
-  idSchema: ZodSchema<{ id: number }>;
+  idSchema: IdSchema;
   schema: ZodSchema<any>;
   updateMethod?: string;
 }
@@ -68,7 +71,7 @@ export const makeUpdateHandler = (opts: UpdateOpts) =>
 
 interface DeleteOpts {
   service: Record<string, any>;
-  idSchema: ZodSchema<{ id: number }>;
+  idSchema: IdSchema;
   deleteMethod?: string;
   inUseMessage?: string;
   inUseCode?: string;
