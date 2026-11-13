@@ -14,25 +14,31 @@ export function readRequestKey(
   )
     return;
   if (String(options.method || "GET").toUpperCase() !== "GET") return;
-  const seen = new Set<object>();
+  // UFO; Date, iç nesne ve undefined dizi elemanını farklı kodlar. Bunlar paylaşılmaz.
+  const scalar = (value: any) =>
+    value === null ||
+    ["string", "boolean"].includes(typeof value) ||
+    (typeof value === "number" && Number.isFinite(value));
   const normalize = (value: any): any => {
-    if (value === null || ["string", "boolean", "undefined"].includes(typeof value)) return value;
-    if (typeof value === "number" && Number.isFinite(value)) return value;
-    if (value instanceof Date) return value.toISOString();
-    if (!value || typeof value !== "object" || seen.has(value))
-      throw new Error("Paylaşılmayan sorgu");
-    seen.add(value);
-    try {
-      if (Array.isArray(value)) return value.map(normalize);
-      if (Object.getPrototypeOf(value) !== Object.prototype) throw new Error("Özel sorgu nesnesi");
-      return Object.fromEntries(
-        Object.keys(value)
-          .sort()
-          .map((key) => [key, normalize(value[key])]),
-      );
-    } finally {
-      seen.delete(value);
-    }
+    if (value == null) return value;
+    if (
+      typeof value !== "object" ||
+      Array.isArray(value) ||
+      Object.getPrototypeOf(value) !== Object.prototype
+    )
+      throw new Error("Özel sorgu");
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map((key) => {
+          const item = value[key];
+          if (Array.isArray(item)) {
+            for (let i = 0; i < item.length; i++)
+              if (!Object.hasOwn(item, i) || !scalar(item[i])) throw new Error("Karmaşık dizi");
+          } else if (item !== undefined && !scalar(item)) throw new Error("Karmaşık sorgu alanı");
+          return [key, item];
+        }),
+    );
   };
   try {
     return JSON.stringify([resource, normalize(options.query), normalize(options.params)]);

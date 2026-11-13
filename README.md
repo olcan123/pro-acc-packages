@@ -5,7 +5,7 @@ Pro-Acc'tan bağımsız geliştirilen ve npm üzerinden tüketilen paketler. Kay
 | Paket | Sürüm | Kullanım |
 | --- | --- | --- |
 | [@pro-acc/ui](https://www.npmjs.com/package/@pro-acc/ui) | 0.0.2 | 48 ortak Nuxt/Vue bileşeni, tema, form, rapor ve POS arayüzü |
-| [@pro-acc/pos-core](https://www.npmjs.com/package/@pro-acc/pos-core) | 0.0.2 | POS/Restoran katmanı, ortak security ve eşzamanlı GET birleştirmesi |
+| [@pro-acc/pos-core](https://www.npmjs.com/package/@pro-acc/pos-core) | 0.0.3 | POS/Restoran katmanı, ortak security ve eşzamanlı GET birleştirmesi |
 
 ## Geliştirme
 

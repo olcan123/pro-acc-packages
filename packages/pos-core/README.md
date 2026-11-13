@@ -3,7 +3,7 @@
 Pro-Acc POS/Restoran ortak Nuxt 4 katmanı. UI uygulaması ve veritabanı bu paketten bağımsızdır; tüketici kendi Prisma istemcisini, server/service sınıflarını ve API plugin'ini sağlar.
 
 ```sh
-pnpm add @pro-acc/ui@0.0.2 @pro-acc/pos-core@0.0.2
+pnpm add @pro-acc/ui@0.0.2 @pro-acc/pos-core@0.0.3
 ```
 
 POS/Restoran Nuxt yapılandırması extends: ["@pro-acc/pos-core"] kullanır. Bu katman @pro-acc/ui modülünü pos:true ile kaydeder. Paylaşılan route'lar hizmetleri tüketici kökü üzerinden (~~/server/service) çağırır; uygulama override davranışı korunur.

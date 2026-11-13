@@ -1,6 +1,6 @@
 {
   "name": "@pro-acc/pos-core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Pro-Acc POS/Restoran ortak Nuxt sayfa, API, servis ve güvenlik katmanı",
   "homepage": "https://github.com/olcan123/pro-acc-packages/tree/main/packages/pos-core#readme",
   "bugs": {
