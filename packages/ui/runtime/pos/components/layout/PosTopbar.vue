@@ -137,7 +137,7 @@
 </template>
 
 <script setup>
-import { formatDateTime } from "../../../utils/date.ts";
+import { formatDateTime } from "@pro-acc/ui-vue/utils/date";
 import { ref, reactive, computed, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useTerminalName } from "../../composables/useTerminalName.js";

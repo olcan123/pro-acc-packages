@@ -81,7 +81,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { EUR_DENOMINATIONS, isBanknote, cleanBreakdown, cashDifferenceKind } from "../../../utils/cash-count.ts";
+import { EUR_DENOMINATIONS, isBanknote, cleanBreakdown, cashDifferenceKind } from "@pro-acc/ui-vue/utils/cash-count";
 import { cashCountPreview } from "../../composables/useCashCount.js";
 
 const props = defineProps({

@@ -1,0 +1,88 @@
+{
+  "name": "@pro-acc/ui-vue",
+  "version": "0.1.0",
+  "description": "Pro-Acc reusable Vue 3 UI without Nuxt: Field inputs, ERP list/form/report components, composables, design tokens and tr/sq/en messages",
+  "keywords": [
+    "erp",
+    "form",
+    "pro-acc",
+    "ui",
+    "vue"
+  ],
+  "homepage": "https://github.com/olcan123/pro-acc-packages/tree/main/packages/ui-vue#readme",
+  "bugs": {
+    "url": "https://github.com/olcan123/pro-acc-packages/issues"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olcan123/pro-acc-packages.git",
+    "directory": "packages/ui-vue"
+  },
+  "type": "module",
+  "sideEffects": [
+    "*.css",
+    "*.vue"
+  ],
+  "files": [
+    "src",
+    "!src/**/*.test.*",
+    "README.md"
+  ],
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./components/*": "./src/components/*",
+    "./erp/*": "./src/erp/*",
+    "./composables/*": "./src/composables/*",
+    "./utils/date": "./src/utils/date.ts",
+    "./utils/cash-count": "./src/utils/cash-count.ts",
+    "./utils/cash-limit": "./src/utils/cash-limit.ts",
+    "./design-tokens": "./src/design-tokens.ts",
+    "./tooltip-directive": "./src/tooltip-directive.ts",
+    "./tokens.css": "./src/styles/tokens.css",
+    "./erp.css": "./src/styles/erp.css",
+    "./locales/*": "./src/locales/*",
+    "./inventory.json": "./src/inventory.json",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "prepack": "vitest run"
+  },
+  "dependencies": {
+    "@vee-validate/zod": "^4.15.1",
+    "currency.js": "^2.0.4",
+    "izitoast": "^1.4.0",
+    "ofetch": "^1.5.1",
+    "vee-validate": "^4.15.1",
+    "xlsx-js-style": "^1.2.0",
+    "zod": "^3.24.2"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "vue-i18n": "^11.0.0",
+    "vue-router": "^4.0.0 || ^5.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/test-utils": "^2.4.11",
+    "happy-dom": "^20.10.6",
+    "unimport": "^6.5.0",
+    "vitest": "^4.0.0",
+    "vue": "^3.5.43",
+    "vue-i18n": "^11.4.5",
+    "vue-router": "^4.6.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
