@@ -104,7 +104,7 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from "vue";
 import { buildSplitPayments, cashKeptAfterChange } from "../../composables/usePaymentSplit.js";
-import { checkCashLimit } from "../../../utils/cash-limit.ts";
+import { checkCashLimit } from "@pro-acc/ui-vue/utils/cash-limit";
 import { useTerminalStore } from "../../stores/terminal.store.js";
 import { useI18n } from "vue-i18n";
 

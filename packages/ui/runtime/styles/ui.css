@@ -1,11 +1,12 @@
-/* ui.css — Ortak Nuxt UI stil girişi. */
+/* ui.css — Ortak Nuxt UI stil girişi. Tasarım kimliği (tokens, ERP) @pro-acc/ui-vue'dadır; POS stilleri bu pakette.
+   @source yolları npm ve pnpm yerleşiminde aynıdır: iki paket node_modules/@pro-acc/ altında kardeştir. */
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
-@import "./tokens.css";
-@import "./erp.css";
+@import "@pro-acc/ui-vue/tokens.css";
+@import "@pro-acc/ui-vue/erp.css";
 @import "./pos.css";
 @plugin "@tailwindcss/forms";
-@source "../components";
-@source "../erp/components";
+@source "../../../ui-vue/src/components";
+@source "../../../ui-vue/src/erp/components";
 @source "../pos/components";
-@source not "../components/form/FieldNumberInput.vue";
+@source not "../../../ui-vue/src/components/form/FieldNumberInput.vue";

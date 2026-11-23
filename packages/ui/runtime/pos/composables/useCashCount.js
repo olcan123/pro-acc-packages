@@ -1,6 +1,6 @@
 // useCashCount.js — Vardiya kapanışı kasa sayımı formunun durumu ve API yükü (pos + restoran ORTAK).
 // Hesap kuralı tek kaynaktadır: packages/pos-ui/utils/cash-count.ts
-import { computeCashCount, cleanBreakdown } from "../../utils/cash-count.ts";
+import { computeCashCount, cleanBreakdown } from "@pro-acc/ui-vue/utils/cash-count";
 
 /** Boş sayım formu. */
 export function emptyCashCount() {

@@ -2,7 +2,7 @@
   "name": "pro-acc-packages",
   "private": true,
   "scripts": {
-    "test": "pnpm --filter @pro-acc/ui --filter @pro-acc/pos-core -r test",
+    "test": "pnpm --filter @pro-acc/ui-vue --filter @pro-acc/ui --filter @pro-acc/pos-core -r test",
     "build": "pnpm --filter @pro-acc/ui build"
   },
   "devDependencies": {
